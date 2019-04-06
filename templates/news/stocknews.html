@@ -1,0 +1,16 @@
+<body style="background-color:#61FFD5">
+<div class="headLines">
+    <h3 style="color: crimson">Top Stories of {{stockname}}</h3>
+    <ul>
+        {% for news in stocknews %}
+            <p>
+                <li>
+                    <a href={{news.url}}>{{news.headline}}</a>
+                    {{news.datetime}}
+                    </p>{{news.summary}}</p>
+                </li>
+            </p>
+        {% endfor %}
+    </ul>
+</div>
+</body>
