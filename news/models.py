@@ -1,5 +1,4 @@
 from django.db import models
-from iex import ReferenceData
 import json
 def getSymbol(stockname):
     with open('news/symbols.txt') as json_file: 
