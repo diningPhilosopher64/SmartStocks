@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stocks</title>
+
+<!-- Chart js import-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+
+
+
+</head>
+<body>
+    
+
+{% comment %} 
+<br>
+
+Company Name : {{object.company_name}}
+<br>
+
+Stock Name : {{object.stock_name}}
+<br>
+
+Description : {{object.description}}
+<br>
+
+Stock Price : {{object.price}}
+<br>
+
+Headquarters : {{object.headquarters}}
+<br>
+
+Company Website : <a href="{{object.url}}" target = "_blank">{{object.company_name}}</a>
+
+
+
+<br>
+
+Founded on : {{object.founded_on}}
+<br>
+
+
+Founders  :{{object.founders}}
+<br>
+
+CEO : {{object.ceo }} {% endcomment %}
+
+
+
+<div class="container">
+    <div class="row">
+    
+     
+     <div class="col-sm-8">
+        <h1 align="center">  <i> {{object.company_name}} Details: <i></h1>
+    <!--jQuery will inject Chart data inside Canvas-->
+     <div class="col-sm-12"> <canvas id="myChart1" width="800" height="600"></canvas></div>
+    <!--jQuery will inject  description here-->
+     <div class="col-sm-12"> <h2>Description :</h2><br>    
+        <p id='Description'></p> 
+    </div>
+     
+
+
+     </div>
+
+    <!--jQuery will inject table data here-->
+    <div class="col-sm-4 float-right" id="stock_table"> </div>
+
+
+            
+
+    </div>
+
+
+
+</div>
+<script>
+
+
+let url = "";
+let endpoint = "";  
+
+var defaultData = [];
+var defaultLabels = [];
+url = "{{request.build_absolute_uri}}";
+url  = url.substring(0,28)
+
+endpoint = url + "/api/chart/data"
+
+$.ajax({
+    
+    method:"GET",
+    url: endpoint,
+   
+    success: function(data){
+       defaultData = data.Data;
+       defaultLabels = data.labels;  
+            
+       setChart('myChart1','line');
+       displayTable(data.table_data);
+       displayDescription(data.Description);
+
+      
+    },
+
+        error: function(error_data){
+            console.log("error");
+            console.log(error_data);
+    },
+
+});
+
+
+function displayDescription(Description)
+{
+    var p_Description = document.getElementById("Description");
+
+    p_Description.innerHTML = Description;
+    
+}
+
+function displayTable(table_data)
+{
+    var table_div = document.getElementById("stock_table");
+    table_div.innerHTML = table_data;
+
+
+    to_remove = ["Services","Products","ISIN","Traded as","Industry"]
+
+
+    for(let i = 0; i < to_remove.length; i++)
+    {
+       var str = 'tr:contains(\"' + to_remove[i] +'\")';
+       var  row  = $(str);
+
+        if(row.length > 0)
+            row.remove();
+    }
+    
+
+}
+
+function setChart(element,type)
+{
+var ctx = document.getElementById(element).getContext('2d');
+var myChart = new Chart(ctx, {
+    type: type,
+    data: {
+        labels: defaultLabels,
+        datasets:   [{
+            label: 'Stock Price',
+            data: defaultData ,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+}
+</script>
+
+
+
+
+
+
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'news.apps.NewsConfig',
+    'stocks.apps.StocksConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,12 @@ WSGI_APPLICATION = 'SmartStocks.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+         'NAME':'smartstocksdb',
+         'USER':'postgres',
+         'PASSWORD':'123456',
+         'HOST':'localhost'
+
     }
 }
 

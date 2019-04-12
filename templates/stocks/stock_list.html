@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stocks</title>
+</head>
+<body>
+    
+{% comment %} 
+    {% for stock in stocks_list %}
+
+        {{stock.stock_name}}
+
+        <br>
+
+        {{stock.description}}
+
+
+    {% endfor %} 
+{% endcomment %}
+
+<h1>Companies are :</h1>
+<br>
+
+{% for instance  in  object_list %}
+
+    <a href=" {% url 'stock_detail' instance.stock_name %} ">{{instance.company_name}} </a>
+   
+    <br>
+    <br>
+    <br>
+
+
+{% endfor %}
+
+
+</body>
+</html>
