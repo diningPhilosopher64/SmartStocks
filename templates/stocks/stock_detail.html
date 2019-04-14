@@ -68,6 +68,18 @@ CEO : {{object.ceo }} {% endcomment %}
      <div class="col-sm-12"> <h2>Description :</h2><br>    
         <p id='Description'></p> 
     </div>
+
+    <div class="col-sm-12">        
+       
+       <table>
+                <tr>
+                    <td> <b> Our Predicted Price is : </b> </td>
+                    <td id="td_predicted"> </td>
+                </tr>
+       </table>
+    
+    
+    </div>
      
 
 
@@ -86,6 +98,16 @@ CEO : {{object.ceo }} {% endcomment %}
 </div>
 <script>
 
+function getAllIndexes(arr, val) 
+{
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1)
+    {
+        indexes.push(i);
+    }
+    return indexes;
+}
+
 
 let url = "";
 let endpoint = "";  
@@ -93,8 +115,9 @@ let endpoint = "";
 var defaultData = [];
 var defaultLabels = [];
 url = "{{request.build_absolute_uri}}";
-url  = url.substring(0,28)
 
+let indices = getAllIndexes(url,"/")
+url = url.substring(0, indices[indices.length - 1])
 endpoint = url + "/api/chart/data"
 
 $.ajax({
@@ -110,6 +133,11 @@ $.ajax({
        displayTable(data.table_data);
        displayDescription(data.Description);
 
+       $('#td_predicted').html(Math.round(data.prediction * 100) / 100);
+
+
+      
+
       
     },
 
@@ -119,6 +147,10 @@ $.ajax({
     },
 
 });
+
+
+
+
 
 
 function displayDescription(Description)
