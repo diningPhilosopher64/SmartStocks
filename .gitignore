@@ -10,4 +10,7 @@ __pycache__/
 local_settings.py
 db.sqlite3
 media
-venv
+venv/
+ml_models/
+stocks_data/
+.ipynb_checkpoints/
