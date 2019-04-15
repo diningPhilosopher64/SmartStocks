@@ -11,6 +11,9 @@ local_settings.py
 db.sqlite3
 media
 venv/
-stocks_data/
+ml_models/
 .ipynb_checkpoints/
+stocks_data/
 .vscode/
+.vscode/settings.json
+

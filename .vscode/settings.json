@@ -1,5 +1,10 @@
 {
+<<<<<<< HEAD
     "python.pythonPath": "venv/bin/python",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true
+=======
+    "python.pythonPath": "/home/sourabh/anaconda2/envs/py3/bin/python",
+    "python.linting.pylintEnabled": true
+>>>>>>> 13704ab22723d403adff1b74966cd39a30225a85
 }
