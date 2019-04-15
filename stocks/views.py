@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from keras import backend as K
 
 import pandas as pd
 import os
@@ -124,6 +125,8 @@ class ChartData(APIView):
         
 
         self.predict_price = Prediction(stock).predict_stock_price()
+        K.clear_session()
+        
         data = {
             "table_data": str(self.table),
             "labels": labels,

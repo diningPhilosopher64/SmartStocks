@@ -14,8 +14,6 @@ import os
 import numpy as np
 
 
-###########################################
-#Need to change constructor Stock.symbols to stock.stock_name
 
 
 class Preprocessing:
@@ -59,14 +57,6 @@ class Preprocessing:
         return self.scaled_data
 
 
-
-
-
-#####################################################################################
-
-
-###########################################
-#Need to change constructor Stock.symbols to stock.stock_name and in model_exists file_path
 
 
 class Prediction:
