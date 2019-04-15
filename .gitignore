@@ -12,5 +12,8 @@ db.sqlite3
 media
 venv/
 ml_models/
-stocks_data/
 .ipynb_checkpoints/
+stocks_data/
+.vscode/
+.vscode/settings.json
+
