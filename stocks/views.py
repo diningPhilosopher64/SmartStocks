@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from keras import backend as K
 
 import pandas as pd
 import os
@@ -19,6 +20,8 @@ import iex
 from iex import Stock as Stock_iex
 
 from .models import Stock
+
+from .ml import Preprocessing, Prediction
 
 from django.views.generic import (
 
@@ -85,6 +88,7 @@ class ChartData(APIView):
 
             response = session.get(url=URL, params=PARAMS)
             DATA = response.json()
+            print("\n\n\n", DATA[2][0:2][0])
             return DATA[2][0:2]
 
     def get_table_data(self, stock):
@@ -118,12 +122,17 @@ class ChartData(APIView):
             stock.table_data = str(self.table)
             stock.description = self.description
             stock.save()
+        
 
+        self.predict_price = Prediction(stock).predict_stock_price()
+        K.clear_session()
+        
         data = {
             "table_data": str(self.table),
             "labels": labels,
             "Data": Data,
             "Description": self.description,
+            "prediction":self.predict_price,
         }
 
         return Response(data)
