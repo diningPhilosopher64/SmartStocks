@@ -119,13 +119,16 @@ var defaultLabels = [];
 url = "{{request.build_absolute_uri}}";
 
 let indices = getAllIndexes(url,"/")
-url = url.substring(0, indices[indices.length - 1])
-endpoint = url + "/api/chart/data"
+base_url = url.substring(0, indices[indices.length - 1])
+endpoint_stock_details = base_url + "/api/chart/data"
+
+console.log("Endpoint of stock_details");
+console.log(endpoint_stock_details);
 
 $.ajax({
     
     method:"GET",
-    url: endpoint,
+    url: endpoint_stock_details,
    
     success: function(data){
        defaultData = data.Data;
@@ -135,11 +138,11 @@ $.ajax({
        displayTable(data.table_data);
        displayDescription(data.Description);
 
-       $('#td_predicted').html(Math.round(data.prediction * 100) / 100);      
+
+
 
       
     },
-
         error: function(error_data){
             console.log("error");
             console.log(error_data);
@@ -149,6 +152,38 @@ $.ajax({
 
 
 
+endpoint_prediction = base_url + "/api/prediction/data"
+
+console.log("Endpoint of prediction");
+console.log(endpoint_prediction);
+
+$.ajax({
+    
+    method:"GET",
+    url: endpoint_prediction,
+
+    success: function(context){
+
+        displayPrediction(context.prediction);        
+    },
+
+        error: function(error_data){
+            console.log("error prediction");
+            console.log(error_data);
+    },
+
+});
+
+
+
+
+
+function displayPrediction(prediction)
+{
+    console.log("prediction is ");
+    console.log(prediction);
+    $('#td_predicted').html(Math.round(prediction * 100) / 100);   
+}
 
 
 
