@@ -70,6 +70,8 @@ class ChartData(APIView):
         return Data, labels
 
     def get_description(self, stock):
+
+        try:
             url = "https://en.wikipedia.org/wiki/"+stock.company_name
             page = requests.get(url)
             soup = BeautifulSoup(page.text, 'html.parser')
@@ -90,12 +92,35 @@ class ChartData(APIView):
             DATA = response.json()
             print("\n\n\n", DATA[2][0:2][0])
             return DATA[2][0:2]
+        except:
+            base_url = "https://www.reuters.com/finance/stocks/companyProfile/"
+            url = base_url + stock.stock_name
+            page = requests.get(url)
+            soup = BeautifulSoup(page.text, 'html.parser')
+            mydivs = soup.findAll("div", {"class": "moduleBody"})
+            data = mydivs[1].findChildren("p")[0].text
+
+            return data
+
+
 
     def get_table_data(self, stock):
-        url = "https://en.wikipedia.org/wiki/"+stock.company_name
-        page = requests.get(url)
-        soup = BeautifulSoup(page.text, 'html.parser')
-        table = soup.find_all("table", class_="infobox vcard")[0]
+        url = "https://en.wikipedia.org/wiki/"
+        try:
+            full_path = url +  stock.company_name
+            page = requests.get(full_path)
+            soup = BeautifulSoup(page.text, 'html.parser')        
+            table = soup.find_all("table", class_="infobox vcard")[0]
+        except:
+            base_url = "https://www.reuters.com/finance/stocks/companyProfile/"
+            company_url = base_url + stock.stock_name
+            page = requests.get(url)
+            soup = BeautifulSoup(page.text, 'html.parser')
+            mydivs = soup.findAll("div", {"class": "moduleBody"})
+            children = mydivs[1].findChildren("p")[0].text
+
+            
+
         return table
 
     def get(self, request, format=None):
@@ -124,18 +149,33 @@ class ChartData(APIView):
             stock.save()
         
 
-        self.predict_price = Prediction(stock).predict_stock_price()
-        K.clear_session()
         
         data = {
             "table_data": str(self.table),
             "labels": labels,
             "Data": Data,
             "Description": self.description,
-            "prediction":self.predict_price,
         }
 
         return Response(data)
+
+
+class PredictionData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        stock = Stock.objects.get(stock_name=current_stock)
+
+        self.predict_price = Prediction(stock).predict_stock_price()
+        K.clear_session()
+
+        context = {
+            "prediction": self.predict_price,
+        }
+
+
+        return Response(context)
 
 
 class StockListView(ListView):
