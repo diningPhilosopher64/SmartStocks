@@ -11,6 +11,7 @@ local_settings.py
 db.sqlite3
 media
 venv/
+pritesh_venv/
 ml_models/
 .ipynb_checkpoints/
 stocks_data/
