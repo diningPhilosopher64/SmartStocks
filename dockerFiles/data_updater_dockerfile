@@ -1,0 +1,23 @@
+FROM python:3.6.7-stretch
+
+
+ENV PYTHONUNBUFFERED 1
+
+
+COPY ./requirements_data.txt /requirements_data.txt
+
+RUN pip3 install -r requirements_data.txt
+
+
+#RUN mkdir /app
+#WORKDIR /app
+
+
+RUN useradd -ms /bin/bash user
+USER user
+
+WORKDIR /home/user
+
+
+CMD ["python3","stock_data_updater.py"]
+

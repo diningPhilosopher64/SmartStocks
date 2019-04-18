@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 
+
 from datetime import date,timedelta
 from time import mktime
 from iex import Stock, reference
@@ -19,8 +20,7 @@ import fix_yahoo_finance as yf
 yf.pdr_override()
 
 
-cwd = os.getcwd().split("/")[:-1]
-path = ("/").join(cwd)
+path = os.getcwd()
 path = os.path.join(path,"stocks_data")
 available_stocks = os.listdir(path)
 
@@ -30,8 +30,9 @@ available_stocks.sort()
 
 
 def get_file_path(symbol):
-    cwd = os.getcwd().split("/")[:-1]
+    cwd = os.getcwd().split("/")
     path = ("/").join(cwd)
+    print("Path", path)
     file_path = os.path.join(path,"stocks_data",symbol+".csv")
     return "".join(file_path)
 
@@ -41,23 +42,26 @@ for i in range(0,len(available_stocks)):
    
     current_symbol = available_stocks[i]
     today = datetime.today().date()
+    file_path = get_file_path(current_symbol)
+    row = []
+    print(file_path)
+
         
     try:
         sleep(1)
         current_stock =  Stock(current_symbol)
-        price = current_stock.price()
+        price = current_stock.price()        
         row = [str(today),0,0,0]
 #         row.append(str(today))
 #         row.append(0)
         row.append(price)
         row.append(0)
         row.append(0)    
-        file_path = get_file_path(current_symbol)
         
         print("Updating stock : ",current_symbol)
 		        
-    except:
-        print("Error")
+    except FileNotFoundError:
+        print("Fine not found Error")
         i -= 1
         sleep(3)
         
