@@ -4,9 +4,9 @@ FROM python:3.6.7-stretch
 ENV PYTHONUNBUFFERED 1
 
 
-COPY ./requirements.txt /requirements.txt
+COPY ./requirements_model.txt /requirements_model.txt
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements_model.txt
 
 
 #RUN mkdir /app
@@ -17,6 +17,9 @@ RUN useradd -ms /bin/bash user
 USER user
 
 WORKDIR /home/user
+
+CMD ["python3","stock_model_updater.py"]
+
 
 
 

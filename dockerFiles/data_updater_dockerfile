@@ -19,5 +19,5 @@ USER user
 WORKDIR /home/user
 
 
-
+CMD ["python3","stock_data_updater.py"]
 

@@ -48,7 +48,7 @@ for i in range(0,len(available_stocks)):
 
         
     try:
-        sleep(0.05)
+        sleep(1)
         current_stock =  Stock(current_symbol)
         price = current_stock.price()        
         row = [str(today),0,0,0]
