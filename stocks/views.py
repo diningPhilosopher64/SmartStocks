@@ -174,7 +174,7 @@ class PredictionData(APIView):
     def get(self, request, format=None):
         stock = Stock.objects.get(stock_name=current_stock)
 
-        self.predict_price = Prediction(stock).predict_stock_price()
+        self.predict_price = Prediction(stock.stock_name).predict_stock_price()
         K.clear_session()
 
         context = {
