@@ -50,15 +50,24 @@ for i in range(0,len(available_stocks)):
     try:
         sleep(1)
         current_stock =  Stock(current_symbol)
-        price = current_stock.price()        
+
+        price = None
+
+        try :
+             price = current_stock.price()
+
+        except:
+                price = float(str(subprocess.check_output(["tail", "-1",file_path ])).split(",")[4])
+
         row = [str(today),0,0,0]
 #         row.append(str(today))
-#         row.append(0)
+#         row.append(0)9
         row.append(price)
         row.append(0)
         row.append(0)    
         
         print("Updating stock : ",current_symbol)
+        
 		        
     except FileNotFoundError:
         print("Fine not found Error")
@@ -69,3 +78,5 @@ for i in range(0,len(available_stocks)):
     with open(file_path,'a') as f:
         writer = csv.writer(f)
         writer.writerow(row)      
+
+    
