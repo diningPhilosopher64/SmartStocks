@@ -1,0 +1,25 @@
+version: "3"
+
+# services: 
+#   data_updater:
+#     build:
+#       context: ./dockerFiles
+#       dockerfile: data_updater_dockerfile
+#     image: data_updater
+
+#     volumes: 
+#       - ./:/home/user/
+#     command: >
+#      sh -c "python3 stock_data_updater.py"
+
+
+#   model_updater:
+#     build:
+#       context: ./dockerFiles
+#       dockerfile: model_updater_dockerfile
+#     image: model_updater
+ 
+#     volumes: 
+#       - ./:/home/user/
+#     command: >
+#      sh -c "python3 stock_model_updater.py"

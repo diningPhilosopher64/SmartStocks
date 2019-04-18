@@ -25,8 +25,8 @@ class Preprocessing:
     cols_to_delete = ['Open', 'High', 'Low', 'Adj Close', 'Volume']
     path = os.getcwd()
 
-    def __init__(self, stock):
-        self.stock_name = stock.stock_name
+    def __init__(self, stock_name):
+        self.stock_name = stock_name
         # self.stock_name = stock.symbols[0]
         self.scaler = MinMaxScaler(feature_range=(0, 1))
 
@@ -63,9 +63,9 @@ class Prediction:
 
     path = os.getcwd()
 
-    def __init__(self, stock):
-        self.stock_name  = stock.stock_name
-        self.preprocessing = Preprocessing(stock)
+    def __init__(self, stock_name):
+        self.stock_name  = stock_name
+        self.preprocessing = Preprocessing(self.stock_name)
         self.scaled_data = self.preprocessing.pre_process()
 
         self.model_exists()

@@ -22,6 +22,7 @@ from iex import Stock as Stock_iex
 from .models import Stock
 
 from .ml import Preprocessing, Prediction
+from .retrieve_table_data import table_data
 
 from django.views.generic import (
 
@@ -52,6 +53,7 @@ class ChartData(APIView):
             stock_file_name = stock.stock_name + ".csv"
 
             strFormat = "%Y-%m-%d"
+            print("\n\n\n\n",os.getcwd(),"\n\n\n")
             df = pd.read_csv(os.path.join(os.getcwd(), "stocks_data", stock_file_name))
             date_parser = lambda word : datetime.datetime.fromtimestamp(time.mktime(time.strptime(str(word),strFormat))).strftime("%d-%b-%Y")
             df['Date'] = df['Date'].map(date_parser)
@@ -64,7 +66,7 @@ class ChartData(APIView):
             labels = list(df['Date'])
 
         except:
-            print("\n\n Exception \n\n")   
+            print("\n\n Chart Data Not Available \n\n")   
 
 
         return Data, labels
@@ -106,6 +108,9 @@ class ChartData(APIView):
 
     def get_table_data(self, stock):
         url = "https://en.wikipedia.org/wiki/"
+
+        table = None
+
         try:
             full_path = url +  stock.company_name
             page = requests.get(full_path)
@@ -116,10 +121,12 @@ class ChartData(APIView):
             company_url = base_url + stock.stock_name
             page = requests.get(url)
             soup = BeautifulSoup(page.text, 'html.parser')
-            mydivs = soup.findAll("div", {"class": "moduleBody"})
-            children = mydivs[1].findChildren("p")[0].text
+            table = soup.findAll("div", {"class": "column2"})
 
-            
+            if not table:
+                table = table_data(stock.stock_name)
+
+
 
         return table
 
@@ -167,7 +174,7 @@ class PredictionData(APIView):
     def get(self, request, format=None):
         stock = Stock.objects.get(stock_name=current_stock)
 
-        self.predict_price = Prediction(stock).predict_stock_price()
+        self.predict_price = Prediction(stock.stock_name).predict_stock_price()
         K.clear_session()
 
         context = {
@@ -176,6 +183,9 @@ class PredictionData(APIView):
 
 
         return Response(context)
+
+
+
 
 
 class StockListView(ListView):
