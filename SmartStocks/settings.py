@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'news.apps.NewsConfig',
     'stocks.apps.StocksConfig',
+    'accounts.apps.AccountsConfig',
     'rest_framework',
 ]
 

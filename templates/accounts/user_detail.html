@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Detail</title>
+</head>
+<body>
+
+
+   {{user.username}}
+   <br>
+   {{user.first_name}}
+   <br>
+
+   {{user.last_name}}
+   <br>
+
+   {{user.email}}
+   <br>
+
+   <a href="{% url 'edit' user.username %}">Edit</a>
+
+
+</body>
+
+</html>
