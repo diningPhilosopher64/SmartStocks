@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <body>
 
-Successfully Registered.
+<h2>User Login</h2>
+  <form class='site-form' method="post" action="login">  {% csrf_token %}
+ 
+    {{ form.as_p }}     
+    
+    <button type="submit">login</button>
+  </form>
     
 </body>
 </html>

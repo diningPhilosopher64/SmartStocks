@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
 
 from .forms import RegisterUser
@@ -8,12 +8,17 @@ from .forms import RegisterUser
 
 
 def index(request):
-    return render(request, 'accounts/home.html')
-
+    form = AuthenticationForm()
+    return render(request, 'accounts/login.html',{"form":form})
 
 def login(request):
-    return render(request, 'accounts/login.html')
-
+     if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            return render(request, 'base/home.html')
+     else:
+         form = AuthenticationForm()
+     return render(request, 'accounts/login.html',{"form":form})
 
 def all_users(request):
     users_list = User.objects.all()

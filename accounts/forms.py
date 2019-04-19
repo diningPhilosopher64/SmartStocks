@@ -24,9 +24,8 @@ class RegisterUser(UserCreationForm):
             fin.balance= self.cleaned_data['balance']
             if commit:
                 user.save()
-                print("Amar")
                 fin.save()
-
             return user
+
 
 
