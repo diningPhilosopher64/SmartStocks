@@ -17,4 +17,4 @@ ml_models/
 stocks_data/
 .vscode/
 .vscode/settings.json
-
+postgres_data
