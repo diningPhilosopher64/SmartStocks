@@ -201,3 +201,10 @@ class StockDetailView(DetailView):
         stock_name = self.kwargs.get('stock_name')
         current_stock = stock_name
         return get_object_or_404(Stock, stock_name=stock_name)
+
+
+def transaction(request,stock_name):
+    current_user = request.user
+    print("Curreent user is ",current_user)
+
+    return render(request,"stocks/transaction.html")

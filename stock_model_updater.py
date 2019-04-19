@@ -46,7 +46,7 @@ available_models = [ model[:-3] for model in available_models ]
 
 
 for model in available_models:  
-  Prediction(model).update_model(10)
+  Prediction(model).update_model(7)
   print("Updating model :",model)
 
 

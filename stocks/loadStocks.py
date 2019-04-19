@@ -18,7 +18,7 @@ company=company[company['stock_name'].isin(available_stocks)]
 
 user=input("Username for Postgres Database ?")
 pwd=input("Enter Password :")
-engine = create_engine('postgresql://'+user+':'+pwd+'@localhost:5432/smartstocksdb')
+engine = create_engine('postgresql://'+user+':'+pwd+'@db:5432/smartstocksdb')
 company.to_sql('stocks_stock', engine, if_exists='append', index=False)
 print("Done!!!")
 

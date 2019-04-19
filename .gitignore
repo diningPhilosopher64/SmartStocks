@@ -17,5 +17,9 @@ ml_models/
 stocks_data/
 .vscode/
 .vscode/settings.json
+
 *.pyc
 postgres_data/
+
+
+
