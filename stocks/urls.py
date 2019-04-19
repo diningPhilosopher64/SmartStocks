@@ -11,6 +11,8 @@ urlpatterns = [
     #path('api/data',views.get_data, name='api-data'),
     path('api/chart/data', ChartData.as_view()),
     path('api/prediction/data', PredictionData.as_view()),
+    path('transaction/<str:stock_name>',views.transaction, name='transaction'),
+
 
 
 ]

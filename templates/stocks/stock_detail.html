@@ -149,11 +149,20 @@ CEO : {{object.ceo }} {% endcomment %}
        
        <table>
                 <tr>
-                    <td> <b> Our Predicted Price is : </b> </td>
-                    <td id="td_predicted"> </td>
+                    <td> <h2> <b> Our Predicted Price for tomorrow is : </b> </h2> </td>
+                    <td id="td_predicted"><h2 id="h2_predicted">  </h2></td>
                 </tr>
        </table>
     </div>
+
+    <div class="col-sm-7">
+
+        <a href="{% url 'transaction' object.stock_name %}" target="_blank"> <button type="button" class="btn btn-success btn-lg pull-right">Buy / Sell</button> </a>      
+       
+    </div>
+
+   
+    
      
 
 
@@ -258,7 +267,7 @@ function displayPrediction(prediction)
 {
     console.log("prediction is ");
     console.log(prediction);
-    $('#td_predicted').html(Math.round(prediction * 100) / 100);   
+    $('#h2_predicted').html(Math.round(prediction * 100) / 100);   
 }
 
 
