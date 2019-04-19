@@ -25,7 +25,7 @@ SECRET_KEY = '5read4!8+y8vw)6gi*m0te!v8kv9w$!qlky+tldb+%gfi^=yz_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -82,11 +82,18 @@ WSGI_APPLICATION = 'SmartStocks.wsgi.application'
 
 DATABASES = {
     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-          'NAME':'smartstocksdb',
-          'USER':'postgres',
-          'PASSWORD':'123456',
-          'HOST':'localhost'
+        #  'ENGINE': 'django.db.backends.postgresql',
+        #   'NAME':'smartstocksdb',
+        #   'USER':'postgres',
+        #   'PASSWORD':'123456',
+        #   'HOST':'localhost'
+
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'smartstocksdb',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 

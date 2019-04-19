@@ -1,0 +1,15 @@
+FROM python:3.6.7-stretch
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements_django.txt /requirements_django.txt
+
+RUN pip3 install -r requirements_django.txt
+
+
+RUN useradd -ms /bin/bash user
+USER user
+
+WORKDIR /home/user
+
+#CMD ['python3','manage.py','runserver','0.0.0.0:8000']
