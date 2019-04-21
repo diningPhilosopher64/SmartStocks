@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from django.http import JsonResponse
 from keras import backend as K
 
@@ -18,11 +18,14 @@ import iex
 
 # Stock Class in iex matches with Stock table in Db. Hence importing Stock_iex
 from iex import Stock as Stock_iex
+import decimal
 
 from .models import Stock
 
 from .ml import Preprocessing, Prediction
 from .retrieve_table_data import table_data
+from django.contrib.auth.models import User
+
 
 from django.views.generic import (
 
@@ -33,9 +36,11 @@ from django.views.generic import (
     DeleteView,
     TemplateView
 )
+from accounts.models import Financials
 
 
 global current_stock
+global todays_prediction
 
 
 
@@ -168,6 +173,7 @@ class ChartData(APIView):
 
 
 class PredictionData(APIView):
+    global todays_prediction 
     authentication_classes = []
     permission_classes = []
 
@@ -175,6 +181,7 @@ class PredictionData(APIView):
         stock = Stock.objects.get(stock_name=current_stock)
 
         self.predict_price = Prediction(stock.stock_name).predict_stock_price()
+        todays_prediction = self.predict_price
         K.clear_session()
 
         context = {
@@ -203,8 +210,179 @@ class StockDetailView(DetailView):
         return get_object_or_404(Stock, stock_name=stock_name)
 
 
-def transaction(request,stock_name):
-    current_user = request.user
-    print("Curreent user is ",current_user)
 
-    return render(request,"stocks/transaction.html")
+
+
+def transaction(request,stock_name):
+    
+
+    current_user = request.user
+    user_financials = Financials.objects.get(user = current_user)
+    columns = ['cashFlow','currentAssets','operatingIncome','grossProfit','totalLiabilities','totalRevenue']
+
+
+    stock = iex.Stock(stock_name)
+    company_name = stock.company()['companyName']
+    todays_price = stock.price() 
+    effective_spread_html = stock.effective_spread_table()[:4].to_html()
+    financials_table =stock.financials_table()
+    financials_table_html = financials_table[columns].to_html()
+
+    stocks_owned = user_financials.stocks_owned
+
+    buy = True
+    if user_financials.balance < todays_price:
+        buy = False
+
+
+    context = {
+        "user_financials": user_financials,
+        "user": current_user,
+        "effective_spread": effective_spread_html,
+        "todays_price": todays_price,
+        "company_name": company_name,
+        "financials": financials_table_html,
+        "user_financials": user_financials,
+        "buy": buy,
+        "stock_name":stock_name,        
+        
+    }   
+
+    sell = False
+    if not stocks_owned:
+        context['sell'] = sell
+        return render(request,"stocks/transaction.html",context)
+
+
+    stocks_owned = eval(stocks_owned)
+    for item in stocks_owned:
+        if item['stock_name'] == stock_name:
+            sell = True
+            context['sell'] = sell
+            break
+
+    return render(request,"stocks/transaction.html",context)
+
+
+
+
+
+        
+
+class BuyStock(APIView):
+    authentication_classes = []
+    permission_classes = []
+    
+
+    def stocks_packer(self,stocks_owned,stock_name,quantity,purchased_at,buying):    
+        current_stock= {}
+        current_stock["stock_name"] = stock_name
+        current_stock["quantity"] = quantity
+        current_stock['purchased_at'] = purchased_at
+
+        if not stocks_owned:
+            stocks_owned = []
+            stocks_owned.append(current_stock);
+            return stocks_owned
+        
+        else:
+            
+            stocks_owned = eval(stocks_owned)               
+            for stock in stocks_owned:
+                if stock['stock_name'] == stock_name:
+                    stock['quantity'] += int(quantity)
+                    stock['purchased_at'] = purchased_at
+                    return stocks_owned               
+            
+
+
+            stocks_owned.append(current_stock)
+            return stocks_owned 
+
+
+
+
+    def post(self, request,current_user,stock_name,quantity,purchased_at, format=None):
+                
+        user_financials = Financials.objects.get(user = current_user)
+
+        quantity = int(quantity)
+        purchased_at = float(purchased_at)
+
+        stocks_owned = user_financials.stocks_owned
+        buying = True
+        stocks_owned = self.stocks_packer(stocks_owned,stock_name,quantity,purchased_at,buying)
+        balance = user_financials.balance
+
+        context = {
+            "updated_balance": balance,
+            "message": "Insufficient Funds..!"           
+        }
+
+        if quantity * purchased_at > balance:
+            return Response(context)
+    
+        balance -= decimal.Decimal(quantity * purchased_at)
+
+        user_financials.balance =  balance 
+        user_financials.stocks_owned = str(stocks_owned)
+        user_financials.save()  
+
+        print("stocks_owned",user_financials.stocks_owned)     
+
+
+        context['updated_balance'] = balance
+        context['message'] = "Stock Purchased ! \n Balance Updated."
+        return Response(context)
+
+
+
+class SellStock(APIView):
+    authentication_classes = []
+    permission_classes = []          
+
+    def can_sell(self,stocks_owned,stock_name,quantity):
+        sellable = False
+        index = -1
+        for stock in stocks_owned:
+            index += 1
+            if stock['stock_name'] == stock_name:
+                if stock['quantity'] > quantity:
+                    sellable = True
+                    break
+        return sellable,index
+                      
+
+
+    def post(self, request,current_user,stock_name,quantity,sold_at, format=None):
+                
+        user_financials = Financials.objects.get(user = current_user)
+
+        quantity = int(quantity)
+        purchased_at = float(sold_at)
+        balance = user_financials.balance
+        stocks_owned = eval(user_financials.stocks_owned)
+        context = {
+            "updated_balance": balance,
+            "message": "Cant sell more than you own."           
+        }
+
+
+        sellable,index = self.can_sell(stocks_owned,stock_name,quantity)
+        if not sellable:
+            return Response(context)
+
+        else:                        
+        
+            balance += decimal.Decimal(quantity * purchased_at)
+            stocks_owned[index]['quantity'] -= quantity
+
+
+            user_financials.balance =  balance 
+            user_financials.stocks_owned = str(stocks_owned)
+            user_financials.save()  
+
+            context['updated_balance'] = balance
+            context["message"] = "Sold Stock Successfully..! Balance Updated."
+            
+            return Response(context)

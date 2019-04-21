@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import StockListView,StockDetailView,ChartData,PredictionData
+from .views import *
+from . import views
 
 urlpatterns = [
    
@@ -11,6 +12,10 @@ urlpatterns = [
     path('api/chart/data', ChartData.as_view()),
     path('api/prediction/data', PredictionData.as_view()),
     path('transaction/<str:stock_name>',views.transaction, name='transaction'),
+    path("api/buy/quantity/<str:current_user>/<str:stock_name>/<str:quantity>/<str:purchased_at>",BuyStock.as_view()),
+    path("api/sell/quantity/<str:current_user>/<str:stock_name>/<str:quantity>/<str:sold_at>",SellStock.as_view()),
+
+
 
 
 

@@ -6,6 +6,14 @@ services:
     #   context: ./dockerFiles
     #   dockerfile: smartstocks_django_dockerfile
     image: sourabhkondapaka/smartstocks-django
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 3
+        window: 10s
+    
+
 
     ports: 
       - 8000:8000

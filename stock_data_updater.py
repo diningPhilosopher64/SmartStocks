@@ -70,7 +70,7 @@ for i in range(0,len(available_stocks)):
         
 		        
     except FileNotFoundError:
-        print("Fine not found Error")
+        print("File not found Error","Current iteration is",i, "File is ", current_symbol)
         i -= 1
         sleep(3)
         

@@ -1,136 +1,10 @@
+{% extends 'master.html' %}
 {% load static %}
 {% load render_partial %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Stocks</title>
 
-<!-- Chart js import-->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-
-<style>
-.gridPanel {
-    float: left;
-    margin: 0 10px;
-    display: inline;
-}
-
-.grid4 {
-    width: 300px;
-}
-
-.column2 .module .moduleHeader {
-    margin: 0;
-}
-
-.module .moduleHeader {
-    float: left;
-    width: 100%;
-    background: #333;
-    padding: 8px 0;
-    margin: 0 0 5px 0;
-    font-size: 10px;
-    color:white;
-
-}
-
-.module .moduleBody {
-    float: left;
-    width: 100%;
-    margin: 5px 0 0 0;
-    padding: 0;
-    font-size: 10px;
-    color:white;
-
-
-}
-
-h1.module-heading, .moduleHeader {
-    display: inline-block;
-    width: 100%;
-    font-size: 10px;
-    color:white;
-
-
-}
-.feature h2 {
-    font-size: 15px;
-    margin: 0 0 5px 0;
-    color:black;
-}
-
-h3
-{
-    color:white;
-}
-
-.dataSmall, .dataSmall a.link {
-    font-size: 15px;
-    color:black;
-}
-
-.feature {
-    float: left;
-    width: 100%;
-    padding: 0;
-}
-
-p
-{
-    color:black;
-}
-
-div {
-    display: block;
-}
-
-</style>
-
-
-</head>
-<body>
     
-
-{% comment %} 
-<br>
-
-Company Name : {{object.company_name}}
-<br>
-
-Stock Name : {{object.stock_name}}
-<br>
-
-Description : {{object.description}}
-<br>
-
-Stock Price : {{object.price}}
-<br>
-
-Headquarters : {{object.headquarters}}
-<br>
-
-Company Website : <a href="{{object.url}}" target = "_blank">{{object.company_name}}</a>
-
-
-
-<br>
-
-Founded on : {{object.founded_on}}
-<br>
-
-
-Founders  :{{object.founders}}
-<br>
-
-CEO : {{object.ceo }} {% endcomment %}
-
-
+{% block content %}
+{% include 'partials/_navbar.html' %}
 
 <div class="container">
     <div class="row">
@@ -157,7 +31,7 @@ CEO : {{object.ceo }} {% endcomment %}
 
     <div class="col-sm-7">
 
-        <a href="{% url 'transaction' object.stock_name %}" target="_blank"> <button type="button" class="btn btn-success btn-lg pull-right">Buy / Sell</button> </a>      
+        <a href="{% url 'transaction' object.stock_name %}" target="_blank"> <button type="button" class="btn btn-success btn-lg pull-right">Buy | Sell</button> </a>      
        
     </div>
 
@@ -203,6 +77,8 @@ var defaultData = [];
 var defaultLabels = [];
 url = "{{request.build_absolute_uri}}";
 
+console.log("Actual urI")
+console.log(url)
 let indices = getAllIndexes(url,"/")
 base_url = url.substring(0, indices[indices.length - 1])
 endpoint_stock_details = base_url + "/api/chart/data"
@@ -344,6 +220,7 @@ var myChart = new Chart(ctx, {
 }
 </script>
 
+{%endblock%}
 
 
 
@@ -352,18 +229,3 @@ var myChart = new Chart(ctx, {
 
 
 
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-
-
-
-
-</body>
-</html>
