@@ -1,0 +1,8 @@
+docker run -d -it -h elasticsearch --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.0.0
+
+
+docker run -d -p 5601:5601 -h kibana --name kibana --link elasticsearch:elasticsearch kibana:7.0.0
+
+
+docker run -h logstash --name logstash --link elasticsearch:elasticsearch -it --rm -v $(pwd):/config-dir logstash:7.0.0 -f /config-dir/logstash.conf
+
