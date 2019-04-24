@@ -20,7 +20,9 @@ function getBuyValues()
 {
     var quantity = $("#buy").val();
     var todays_price = $("#todays_price").text().substr(1);
-    var stock_name = $('#stock_name').text();
+    var stock_name = $('#stock_name_holder').text();
+
+    console.log(quantity,stock_name,todays_price)
 
     return [stock_name,quantity,todays_price];
 
@@ -30,7 +32,7 @@ function getSellValues()
 {
     var quantity = $("#sell").val();
     var todays_price = $("#todays_price").text().substr(1);
-    var stock_name = $('#stock_name').text();
+    var stock_name = $('#stock_name_holder').text();
 
     return [stock_name,quantity,todays_price];
 }
@@ -63,18 +65,22 @@ function getSellValues()
 
             </div>
 
-                <div class="col-sm-6">
+            {% if financials %}
+                
+            <div class="col-sm-6">
 
-            <h3 align="center">Financials of <span id="stock_name"> {{stock_name}}  </span> </h3>
-                {{ context_var|safe }}
-                {% autoescape off %}
-                <div id="table_div">
-                    {{financials}}
-                </div>
-                {{ context_var }}
-                {% endautoescape %}
+                <h3 align="center">Financials of <span id="stock_name"> {{stock_name}}  </span> </h3>
+                    {{ context_var|safe }}
+                    {% autoescape off %}
+                    <div id="table_div">
+                        {{financials}}
+                    </div>
+                    {{ context_var }}
+                    {% endautoescape %}
 
                 </div>
+
+            {% endif %}
 
     </div>
 
@@ -105,6 +111,7 @@ function getSellValues()
 
         {% if buy %}
 
+
             <label for="buy_quantity">Quantity : </label>
             <input type="number" name="buy_quantity" id="buy"step="1">
             <button class="btn btn-primary" id="buyButton">Buy</button>
@@ -119,6 +126,7 @@ function getSellValues()
         <input type="submit" class= "btn btn-primary" id="sellButton" value="Sell">   
         {% endif %}
 
+        <span id="stock_name_holder" style="display:none;"> {{stock_name}}  </span>
 
     </div>
 

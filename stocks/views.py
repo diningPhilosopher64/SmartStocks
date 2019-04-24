@@ -213,8 +213,7 @@ class StockDetailView(DetailView):
 
 
 
-def transaction(request,stock_name):
-    
+def transaction(request,stock_name):    
 
     current_user = request.user
     user_financials = Financials.objects.get(user = current_user)
@@ -224,9 +223,22 @@ def transaction(request,stock_name):
     stock = iex.Stock(stock_name)
     company_name = stock.company()['companyName']
     todays_price = stock.price() 
-    effective_spread_html = stock.effective_spread_table()[:4].to_html()
-    financials_table =stock.financials_table()
-    financials_table_html = financials_table[columns].to_html()
+
+    effective_spread_html = None
+    financials_table_html = None
+    try:
+        effective_spread_html = stock.effective_spread_table()[:4].to_html()
+    except:
+        effective_spread_html = ""
+        print("Unable to fetch from iex API")
+    
+    try:
+        financials_table =stock.financials_table()
+        financials_table_html = financials_table[columns].to_html()
+
+    except:
+        financials_table_html = ""
+        print("Unable to fetch from iex API")
 
     stocks_owned = user_financials.stocks_owned
 
@@ -260,6 +272,7 @@ def transaction(request,stock_name):
             sell = True
             context['sell'] = sell
             break
+    
 
     return render(request,"stocks/transaction.html",context)
 
@@ -328,7 +341,10 @@ class BuyStock(APIView):
         user_financials.stocks_owned = str(stocks_owned)
         user_financials.save()  
 
-        print("stocks_owned",user_financials.stocks_owned)     
+        
+
+        print("stocks_owned",user_financials.stocks_owned)  
+
 
 
         context['updated_balance'] = balance
