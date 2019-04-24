@@ -1,7 +1,19 @@
-<!DOCTYPE html>
-<html>
-<body style="background-color:#61FFD5">
-<h1 style="text-align: center;color: crimson">About</h1>
-<h2 style="color: gray">Amar bhaiyaa hai</h2>
-</body>
-</html>   
+{% extends 'master.html' %}
+{% block content %}
+{% include 'partials/_basenavbar.html' %}
+<h3 style="color: crimson;float: left">About Us</h3>
+<br>
+<br>
+<br>
+<div style="border:1px solid green;">
+<p>SmartStocks provides platform to invest in <b>NASDAQ</b> share market.</p>
+<p>It uses the highly precise machine learning techniques for prediction of stock prices.</p>
+<p>This helps customer invest profitably.Support over <b>8000 stocks</b> in NASDAQ.</p>
+<p>SmartStocks runs on system configured and managed using <b>DevOps tools</b></p>
+<p>which provides uninterupted user experience and stable updates..</p>
+<br>
+<p><b>Contact Us:</b></p>
+<p>smartstocks@gmail.com</p>
+</div>
+{% endblock%}
+

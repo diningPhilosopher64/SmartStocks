@@ -1,40 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Stocks</title>
-</head>
-<body>
-    
-{% comment %} 
-    {% for stock in stocks_list %}
-
-        {{stock.stock_name}}
-
-        <br>
-
-        {{stock.description}}
-
-
-    {% endfor %} 
-{% endcomment %}
-
-<h1>Companies are :</h1>
+{% extends 'master.html' %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
 <br>
-
+<input type="text" id="searchbox" placeholder="Search for Stocks.."/>
+<button type="button" class="btn btn-success" id="search" onclick="myFunction()">Search</button>
+<br>
+<h1>Stocks Available:</h1>
+<div id="stocksList" style="height:1000px;width:50%;border:solid 2px orange;overflow:scroll;overflow-x:hidden;overflow-y:scroll;float:left;">
 {% for instance  in  object_list %}
-
-    <a href=" {% url 'stock_detail' instance.stock_name %} ">{{instance.company_name}} </a>
-   
-    <br>
-    <br>
-    <br>
-
-
+   <li class="list-group-item"><a href=" {% url 'stock_detail' instance.stock_name %}" target="_blank">{{instance.company_name}} </a></li>
 {% endfor %}
-
-
-</body>
-</html>
+</div>
+<div id="searchResults" style="height:1000px;width:50%;border:solid 2px orange;overflow:scroll;overflow-x:hidden;overflow-y:scroll;float:right;">
+  <textarea placeholder="Search Results..." style="height:100%;width:100%;"></textarea>
+</div>
+<script type = "text/javascript">
+function myFunction() {
+  var input, filter, li,i,a,txtValue,copy,cln;
+  input = document.getElementById("searchbox");
+  filter = input.value.toUpperCase();
+  document.getElementById('searchResults').innerHTML="";  
+  if(filter)
+  {
+    li = document.getElementById("stocksList").querySelectorAll("li")
+    copy= document.getElementById('searchResults');
+    for (i = 0; i < li.length; i++)
+    {a = li[i].getElementsByTagName("a")[0];
+     txtValue = a.text;
+     if (txtValue.toUpperCase().startsWith(filter))
+      {
+        cln=li[i].cloneNode(true);
+        copy.appendChild(cln);
+      }
+    }
+  }
+}
+</script>
+{% endblock%}

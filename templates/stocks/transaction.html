@@ -5,10 +5,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+<script>
+function getBuyValues()
+{
+    var quantity = $("#buy").val();
+    var todays_price = $("#todays_price").text().substr(1);
+    var stock_name = $('#stock_name_holder').text();
+
+    console.log(quantity,stock_name,todays_price)
+
+    return [stock_name,quantity,todays_price];
+
+}   
+
+function getSellValues()
+{
+    var quantity = $("#sell").val();
+    var todays_price = $("#todays_price").text().substr(1);
+    var stock_name = $('#stock_name_holder').text();
+
+    return [stock_name,quantity,todays_price];
+}
+
+</script>
+
 </head>
 <body>
+
+<div class="container-fluid">
+  <h3> Hello,  {{user}} </h3>
+
+  <bold> <h2 align="center">  Details of {{company_name}} </h2> <bold>
+
+   
+
+    <div class="row">          
+
+            <br><br>
+            <div class="col-sm-6 pull-left">
+
+            <h3 align="center">Effective Spread : </h3>
+                {{ context_var|safe }}
+                {% autoescape off %}
+                <div id="table_div">
+                    {{effective_spread}}
+                </div>
+                {{ context_var }}
+                {% endautoescape %}
+
+            </div>
+
+            {% if financials %}
+                
+            <div class="col-sm-6">
+
+                <h3 align="center">Financials of <span id="stock_name"> {{stock_name}}  </span> </h3>
+                    {{ context_var|safe }}
+                    {% autoescape off %}
+                    <div id="table_div">
+                        {{financials}}
+                    </div>
+                    {{ context_var }}
+                    {% endautoescape %}
+
+                </div>
+
+            {% endif %}
+
+    </div>
+
+
+    <div class="row text-center">
     
-<h1>Hello world</h1>
+        <h3>  
+            <b><u>Your details </u><b> 
+        </h3> 
+
+        <div class="col-sm-6 text-right">
+            <h3>  A/c Number : {{user_financials.account_num}} <br> </h3>
+        </div>
+        <div class="col-sm-6 text-left">
+            <h3> Balance  : <span id="balance"> ${{user_financials.balance}}  </span> </h3>
+        </div>
+
+        <div class="text-center">
+            <div class="col-sm-6 text-right">
+                <h4>Today's Price :</h4>
+            </div>
+            <div class="col-sm-6 text-left">
+                <h4 id="todays_price">${{todays_price}}</h4>
+             </div>
+        </div>
+
+        <br>
+
+        {% if buy %}
+
+
+            <label for="buy_quantity">Quantity : </label>
+            <input type="number" name="buy_quantity" id="buy"step="1">
+            <button class="btn btn-primary" id="buyButton">Buy</button>
+
+        {% endif %}
+
+        <br><br>
+
+        {% if sell %}
+        <label for="sell_quantity">Quantity : </label>
+        <input type="number" name="sell_quantity" id="sell"step="1">
+        <input type="submit" class= "btn btn-primary" id="sellButton" value="Sell">   
+        {% endif %}
+
+        <span id="stock_name_holder" style="display:none;"> {{stock_name}}  </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+
+$("#table_div").addClass("table-responsive")
+$("table").addClass("table table-hover table-bordered")
+
+function getAllIndexes(arr, val) 
+{
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1)
+    {
+        indexes.push(i);
+    }
+    return indexes;
+}
+
+function updates(updated_balance,message)
+{
+        alert(message);
+        $("#balance").html("$"+Math.round(updated_balance * 100) / 100);
+        $("#sell").val("");
+        $("#buy").val("");
+}
+
+
+
+function endpointGenerator(action)
+{
+    var array;
+    if(action == "buy")
+        array = getBuyValues();
+    else 
+        array = getSellValues();
+
+
+    var stock_name = String(array[0]).trim();
+    var quantity = String(array[1]).trim();
+    var todays_price = String(array[2]).trim();
+    var current_user = "{{user}}"
+
+    if(quantity == "")
+        return;
+
+    url = "{{request.build_absolute_uri}}";
+    let indices = getAllIndexes(url,"/")    
+    base_url = url.substring(0, indices[indices.length - 2])
+    endpoint = base_url + "/api/"+action+"/quantity/" +current_user+"/"+stock_name+"/"+quantity+"/"+todays_price;
+
+    return endpoint;
+}
+
+function ajaxCall(action)
+{
+  endpoint = endpointGenerator(action);
+  console.log(endpoint);    
+  $.ajax({
+    
+    method:"POST",
+    url:endpoint,
+   
+    success: function(data){        
+        updates(data.updated_balance,data.message);      
+    },
+    error: function(error_data){
+        console.log(error_data);
+    },
+    });
+
+}
+
+
+$('#buyButton').click(function(){    
+    ajaxCall("buy");    
+});
+
+$('#sellButton').click(function(){
+    ajaxCall("sell");
+});
+
+
+
+</script>
 
 </body>
 </html>

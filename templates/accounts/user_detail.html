@@ -1,28 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User Detail</title>
-</head>
-<body>
-
-
-   {{user.username}}
-   <br>
-   {{user.first_name}}
-   <br>
-
-   {{user.last_name}}
-   <br>
-
-   {{user.email}}
-   <br>
-
-   <a href="{% url 'edit' user.username %}">Edit</a>
-
-
-</body>
-
-</html>
+{% extends 'master.html' %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
+<div style="border:1px solid green;">
+ <table class="table table-striped">
+ <tr>
+ <td>User Name</td>
+ <td>{{user.username}}</td>
+ </tr>
+ <tr>
+ <td>First Name</td>
+ <td>{{user.first_name}}</td>
+ </tr>
+ <tr>
+ <td>Last Name</td>
+ <td>{{user.last_name}}</td>
+ </tr>
+ <tr>
+ <td>Email Id</td>
+ <td>{{user.email}}</td>
+ </tr>
+</table>
+</div>
+   <a href="{% url 'edit' user.username %}" class="btn btn-primary" role="button">Edit Profile</a>
+{% endblock%}

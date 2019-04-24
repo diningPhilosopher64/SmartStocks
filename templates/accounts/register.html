@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
-</head>
-<body>
-    
-  <h2>Register User</h2>
+{% extends 'master.html' %}
+{% block content %}{% include 'partials/_basenavbar.html' %}
+<div class="row">
+    <div class="col-lg-10 col-md-offset-0" style="border:1px solid green;">
+  <h2>Registration Form</h2>
+  <hr style="border:1px solid green;">
   <form method="post" action="register">  {% csrf_token %}
- 
-    {{ form.as_p }}
-    
-    <button type="submit">Register</button>
+    {{ form.as_p }}  
+    <button type="submit" class="btn btn-success">Register</button>
   </form>
-
-</body>
-</html>
+    </div>
+</div>
+  {% endblock%}

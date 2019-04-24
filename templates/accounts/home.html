@@ -1,33 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home</title>
-</head>
-<body>
-
- 
-<a href=" {% url 'register' %} "> Register</a>
-
-<br>
-<br>
-<br>
-<br>
-
-    
-<a href=" {% url 'login' %} ">Login</a>
-
-<br>
-<br>
-<br>
-<br>
-
-    
-<a href=" {% url 'all_users' %} ">All users</a>
-
-
-
-</body>
-</html>
+{% extends 'master.html' %}
+{% block content %}
+{% include 'partials/_basenavbar.html' %}
+<div class="jumbotron" style="border:1px solid green;">
+  <h1>Welcome To SmartStocks!</h1>
+  <p>Invest in Stocks with power of Machine Learning....</p>
+  <p>SmartStocks provides platform to invest in <b>NASDAQ</b> share market.</p>
+  <p>It uses the highly precise machine learning techniques for prediction of stock prices.</p>
+  <p>This helps customer invest profitably.Support over <b>8000 stocks</b> in NASDAQ.</p>
+  <p><a href=" {% url 'register' %} " class="btn btn-primary btn-lg" role="button"> SignUp</a>
+     <a href=" {% url 'login' %} " class="btn btn-primary btn-lg" role="button">Login</a>
+  </p>
+</div>
+{% endblock%}

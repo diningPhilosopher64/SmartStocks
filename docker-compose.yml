@@ -5,7 +5,18 @@ services:
     # build:
     #   context: ./dockerFiles
     #   dockerfile: smartstocks_django_dockerfile
-    image: sourabhkondapaka/smartstocks-django
+    image: sourabhkondapaka/smartstocks-django:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 3
+        window: 10s
+
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://172.17.0.4:5000"
 
     ports: 
       - 8000:8000
@@ -15,6 +26,8 @@ services:
 
     depends_on: 
       - db
+    
+
     command: >
      sh -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
 
@@ -26,7 +39,12 @@ services:
     ports: 
       - 7890:5432
 
+    # logging:
+    #   driver: syslog
+    #   options:
+    #     syslog-address: "tcp://172.17.0.4:5000"
+
+
     volumes: 
       - ./postgres_data:/var/lib/postgresql/data
 
-    
