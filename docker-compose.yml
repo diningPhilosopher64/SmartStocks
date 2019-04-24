@@ -16,7 +16,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://localhost:5000"
+        syslog-address: "tcp://172.17.0.4:5000"
 
     ports: 
       - 8000:8000
@@ -26,7 +26,6 @@ services:
 
     depends_on: 
       - db
-
     
 
     command: >
@@ -39,6 +38,11 @@ services:
 
     ports: 
       - 7890:5432
+
+    # logging:
+    #   driver: syslog
+    #   options:
+    #     syslog-address: "tcp://172.17.0.4:5000"
 
 
     volumes: 

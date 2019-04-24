@@ -1,18 +1,20 @@
 {% extends 'master.html' %}
 {% block content %}
 {% include 'partials/_navbar.html' %}   
-<h2 style="text-align: center;"><strong>Welcome</strong></h2>
+<h2 style="text-align: center;"><strong>Welcome {{username}}</strong></h2>
 <hr style="border:1px solid grey;">
-
-
-
-
-
-
-
-
-
-
-
-
+<div style="border:solid 2px orange;">
+{% for stock in stocks_owned %}
+<li class="list-group-item">
+            <div class="card" style="width: 18rem;">
+            <div class="card-body">
+            <h4 class="card-title"><b>Stock Name:</b> {{stock.stock_name}}</h4>
+            <p class="card-text">Quantity: {{stock.quantity}}</p>
+            <p class="card-text">Purchased at: {{stock.purchased_at}}$</p>
+            <a href="{% url 'stock_detail' stock.stock_name %}" class="btn btn-primary">Go</a>
+            </div>
+            </div>
+</li>
+        {% endfor %}
+</div>
 {% endblock%}

@@ -6,3 +6,5 @@ docker run -d -p 5601:5601 -h kibana --name kibana --link elasticsearch:elastics
 
 docker run -h logstash --name logstash --link elasticsearch:elasticsearch -it --rm -v $(pwd):/config-dir logstash:7.0.0 -f /config-dir/elk.conf
 
+
+docker run docker.elastic.co/beats/metricbeat:7.0.0 setup -E setup.kibana.host=172.17.0.3:5601 -E output.elasticsearch.hosts=["172.17.0.2:9200"]

@@ -1,0 +1,48 @@
+{% extends 'master.html' %}
+{% load static %}
+{% load render_partial %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container-fluid" id="news">
+
+
+
+
+
+</div>
+    
+<script>
+
+$.ajax({
+    
+    method:"GET",
+    url: "https://finance.yahoo.com/",
+
+    success: function(context){
+        
+        $("#news").html(context)
+             
+    },
+
+        error: function(error_data){
+            console.log("error prediction");
+            console.log(error_data);
+    },
+
+});
+
+
+</script>
+
+
+</body>
+</html>
