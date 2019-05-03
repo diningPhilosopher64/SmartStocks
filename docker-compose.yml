@@ -16,7 +16,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://172.17.0.4:5000"
+        syslog-address: "tcp://172.17.0.5:5000"
 
     ports: 
       - 8000:8000
