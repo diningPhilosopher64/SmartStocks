@@ -16,7 +16,7 @@ mock==2.0.0
 numpy==1.16.2
 pandas==0.24.2
 pbr==5.1.3
-Pillow==6.0.0
+Pillow==8.2.0
 protobuf==3.7.1
 psycopg2==2.8.2
 psycopg2-binary==2.8.2
