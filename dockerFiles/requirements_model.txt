@@ -1,6 +1,6 @@
 # pip freeze
 absl-py==0.7.1
-arrow==0.13.1
+arrow==0.15.1
 astor==0.7.1
 certifi==2019.3.9
 chardet==3.0.4
